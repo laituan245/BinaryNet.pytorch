@@ -56,17 +56,24 @@ test_loader = torch.utils.data.DataLoader(
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.infl_ratio=3
-        self.fc1 = BinarizeLinear(784, 2048*self.infl_ratio)
+
+        # Block 1
+        self.fc1 = BinarizeLinear(784, 100)
+        self.bn1 = nn.BatchNorm1d(100)
         self.htanh1 = nn.Hardtanh()
-        self.bn1 = nn.BatchNorm1d(2048*self.infl_ratio)
-        self.fc2 = BinarizeLinear(2048*self.infl_ratio, 2048*self.infl_ratio)
+
+        # Block 2
+        self.fc2 = BinarizeLinear(100, 100)
+        self.bn2 = nn.BatchNorm1d(100)
         self.htanh2 = nn.Hardtanh()
-        self.bn2 = nn.BatchNorm1d(2048*self.infl_ratio)
-        self.fc3 = BinarizeLinear(2048*self.infl_ratio, 2048*self.infl_ratio)
+
+        # Block 3
+        self.fc3 = BinarizeLinear(100, 100)
+        self.bn3 = nn.BatchNorm1d(100)
         self.htanh3 = nn.Hardtanh()
-        self.bn3 = nn.BatchNorm1d(2048*self.infl_ratio)
-        self.fc4 = nn.Linear(2048*self.infl_ratio, 10)
+
+        # Output
+        self.fc4 = nn.Linear(100, 10)
         self.logsoftmax=nn.LogSoftmax()
         self.drop=nn.Dropout(0.5)
 
