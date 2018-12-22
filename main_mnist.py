@@ -1,5 +1,6 @@
 
 from __future__ import print_function
+import os
 import argparse
 import torch
 import torch.nn as nn
@@ -144,3 +145,4 @@ def test():
 for epoch in range(1, args.epochs + 1):
     train(epoch)
     test()
+    torch.save(model, os.path.join('trained_model/', 'mnist_bnn'))
