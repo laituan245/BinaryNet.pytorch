@@ -15,8 +15,8 @@ parser.add_argument('--batch-size', type=int, default=64, metavar='N',
                     help='input batch size for training (default: 256)')
 parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                     help='input batch size for testing (default: 1000)')
-parser.add_argument('--epochs', type=int, default=100, metavar='N',
-                    help='number of epochs to train (default: 10)')
+parser.add_argument('--epochs', type=int, default=5, metavar='N',
+                    help='number of epochs to train (default: 5)')
 parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
                     help='learning rate (default: 0.001)')
 parser.add_argument('--momentum', type=float, default=0.5, metavar='M',
@@ -67,11 +67,6 @@ class Net(nn.Module):
         self.bn2 = nn.BatchNorm1d(100)
         self.htanh2 = nn.Hardtanh()
 
-        # Block 3
-        self.fc3 = BinarizeLinear(100, 100)
-        self.bn3 = nn.BatchNorm1d(100)
-        self.htanh3 = nn.Hardtanh()
-
         # Output
         self.fc4 = nn.Linear(100, 10)
         self.logsoftmax=nn.LogSoftmax()
@@ -84,11 +79,8 @@ class Net(nn.Module):
         x = self.htanh1(x)
         x = self.fc2(x)
         x = self.bn2(x)
-        x = self.htanh2(x)
-        x = self.fc3(x)
         x = self.drop(x)
-        x = self.bn3(x)
-        x = self.htanh3(x)
+        x = self.htanh2(x)
         x = self.fc4(x)
         return self.logsoftmax(x)
 
